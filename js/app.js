@@ -3,9 +3,9 @@ const dateTask = document.getElementById("date-todo");
 const addTask = document.getElementById("add-todo");
 const alertMsg = document.getElementById("alert-message");
 const todosBody = document.querySelector("tbody");
+const deleteAllButton = document.getElementById("delete-all-btn");
 
-
-const todos = JSON.parse(localStorage.getItem("todos")) || [];
+let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
 const generateId = () => {
   return Math.round(Math.random() * Math.random() * Math.pow(10, 15)).toString();
@@ -70,5 +70,18 @@ const addHandler = () => {
   }
 };
 
+const deleteAllHandler = () => {
+  if (todos.length) {
+    todos = [];
+    saveToLocalStorage();
+    // localStorage.clear();
+    displayTodos();
+    showAlert("All todos cleared successfully", "success");
+  } else {
+    showAlert("No todos to clear", "error");
+  }
+};
+
 window.addEventListener("load", displayTodos);
 addTask.addEventListener("click", addHandler);
+deleteAllButton.addEventListener("click", deleteAllHandler);
