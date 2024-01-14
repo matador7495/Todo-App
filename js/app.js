@@ -2,7 +2,8 @@ const nameTask = document.getElementById("name-todo");
 const dateTask = document.getElementById("date-todo");
 const addTask = document.getElementById("add-todo");
 const alertMsg = document.getElementById("alert-message");
-const todos = [];
+
+const todos = JSON.parse(localStorage.getItem("todos")) || [];
 
 const generateId = () => {
   return Math.round(Math.random() * Math.random() * Math.pow(10, 15)).toString();
@@ -20,6 +21,10 @@ const showAlert = (message, type) => {
   }, 2000);
 };
 
+const saveToLocalStorage = () => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
+
 const addHandler = () => {
   const nameTodo = nameTask.value;
   const dateTodo = dateTask.value;
@@ -31,6 +36,7 @@ const addHandler = () => {
   };
   if (nameTodo) {
     todos.push(todo);
+    saveToLocalStorage();
     nameTask.value = "";
     dateTask.value = "";
     console.log(todos);
