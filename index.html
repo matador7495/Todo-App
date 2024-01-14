@@ -7,6 +7,68 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
+    <div id="container">
+      <div class="app-todo">
+        <h1>My Todo App</h1>
+        <div class="inputs">
+          <input type="text" id="name-todo" placeholder="Enter your todo" />
+          <input type="date" id="date-todo" />
+          <button id="add-todo">Add</button>
+        </div>
+        <div class="buttons-filter">
+          <div>
+            <button class="filter-todo" data-all="">All</button>
+            <button class="filter-todo" data-pending="">Pending</button>
+            <button class="filter-todo" data-completed="">Completed</button>
+          </div>
+          <button id="delete-all-btn">Delete All</button>
+        </div>
+      </div>
+      <div class="list-todo">
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>NoDate</td>
+              <td>pending</td>
+              <td>
+                <button>edit</button>
+                <button>edit</button>
+                <button>edit</button>
+              </td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>NoDate</td>
+              <td>pending</td>
+              <td>
+                <button>edit</button>
+                <button>edit</button>
+                <button>edit</button>
+              </td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>NoDate</td>
+              <td>pending</td>
+              <td>
+                <button>edit</button>
+                <button>edit</button>
+                <button>edit</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     <script src="./js/app.js"></script>
   </body>
 </html>
