@@ -4,6 +4,10 @@ const addTask = document.getElementById("add-todo");
 const alertMsg = document.getElementById("alert-message");
 const todos = [];
 
+const generateId = () => {
+  return Math.round(Math.random() * Math.random() * Math.pow(10, 15)).toString();
+};
+
 const showAlert = (message, type) => {
   alertMsg.innerHTML = "";
   const alert = document.createElement("p");
@@ -20,6 +24,7 @@ const addHandler = () => {
   const nameTodo = nameTask.value;
   const dateTodo = dateTask.value;
   const todo = {
+    id: generateId(),
     task: nameTodo,
     date: dateTodo,
     completed: false,
