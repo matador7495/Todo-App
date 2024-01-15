@@ -1,6 +1,7 @@
-const nameTask = document.getElementById("name-todo");
-const dateTask = document.getElementById("date-todo");
-const addTask = document.getElementById("add-todo");
+const taskInput = document.getElementById("name-todo");
+const dateInput = document.getElementById("date-todo");
+const addBtn = document.getElementById("add-todo");
+const editBtn = document.getElementById("edit-todo");
 const alertMsg = document.getElementById("alert-message");
 const todosBody = document.querySelector("tbody");
 const deleteAllButton = document.getElementById("delete-all-btn");
@@ -40,7 +41,7 @@ const displayTodos = () => {
       <td>${todo.date || "No Date"}</td>
       <td>${todo.completed ? "Completed" : "Pending"}</td>
       <td>
-        <button>Edit</button>
+        <button onclick="editHandler('${todo.id}')" >Edit</button>
         <button onclick="toggleHandler('${todo.id}')">
         ${todo.completed ? "Undo" : "Do"}
         </button>
@@ -52,8 +53,8 @@ const displayTodos = () => {
 };
 
 const addHandler = () => {
-  const nameTodo = nameTask.value;
-  const dateTodo = dateTask.value;
+  const nameTodo = taskInput.value;
+  const dateTodo = dateInput.value;
   const todo = {
     id: generateId(),
     task: nameTodo,
@@ -64,8 +65,8 @@ const addHandler = () => {
     todos.push(todo);
     saveToLocalStorage();
     displayTodos();
-    nameTask.value = "";
-    dateTask.value = "";
+    taskInput.value = "";
+    dateInput.value = "";
     showAlert("Todo added successfully", "success");
   } else {
     showAlert("please enter a todo !", "error");
@@ -93,8 +94,8 @@ const deleteHandler = (id) => {
 
 const toggleHandler = (id) => {
   //cleanCode
-  const updateStatus = todos.find((todo) => todo.id === id);
-  updateStatus.completed = !updateStatus.completed;
+  const getTodo = todos.find((todo) => todo.id === id);
+  getTodo.completed = !getTodo.completed;
   saveToLocalStorage();
   displayTodos();
   showAlert("Todo status changed successfully", "success");
@@ -115,6 +116,30 @@ const toggleHandler = (id) => {
   // todos = updateStatus;
 };
 
+const editHandler = (id) => {
+  const getTodo = todos.find((todo) => todo.id === id);
+  taskInput.value = getTodo.task;
+  dateInput.value = getTodo.date;
+  addBtn.style.display = "none";
+  editBtn.style.display = "inline-block";
+  editBtn.dataset.id = id;
+};
+
+const applyEditHandler = (event) => {
+  const id = event.target.dataset.id;
+  const getTodo = todos.find((todo) => todo.id === id);
+  getTodo.task = taskInput.value;
+  getTodo.date = dateInput.value;
+  taskInput.value = "";
+  dateInput.value = "";
+  addBtn.style.display = "inline-block";
+  editBtn.style.display = "none";
+  saveToLocalStorage();
+  displayTodos();
+  showAlert("Todo edited successfully", "success");
+};
+
 window.addEventListener("load", displayTodos);
-addTask.addEventListener("click", addHandler);
+addBtn.addEventListener("click", addHandler);
+editBtn.addEventListener("click", applyEditHandler);
 deleteAllButton.addEventListener("click", deleteAllHandler);

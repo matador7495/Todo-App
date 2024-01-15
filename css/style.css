@@ -121,3 +121,6 @@ tbody td button:nth-child(3) {
 .alert-error {
   background-color: var(--color-error);
 }
+#edit-todo {
+  display: none;
+}
