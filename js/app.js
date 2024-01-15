@@ -41,8 +41,10 @@ const displayTodos = () => {
       <td>${todo.completed ? "Completed" : "Pending"}</td>
       <td>
         <button>Edit</button>
-        <button>Do</button>
-        <button>Delete</button>
+        <button onclick="toggleHandler('${todo.id}')">
+        ${todo.completed ? "Undo" : "Do"}
+        </button>
+        <button onclick="deleteHandler('${todo.id}')">Delete</button>
       </td>    
     </tr>
     `;
@@ -80,6 +82,37 @@ const deleteAllHandler = () => {
   } else {
     showAlert("No todos to clear", "error");
   }
+};
+
+const deleteHandler = (id) => {
+  todos = todos.filter((todo) => todo.id !== id);
+  saveToLocalStorage();
+  displayTodos();
+  showAlert("Todo deleted successfully", "success");
+};
+
+const toggleHandler = (id) => {
+  //cleanCode
+  const updateStatus = todos.find((todo) => todo.id === id);
+  updateStatus.completed = !updateStatus.completed;
+  saveToLocalStorage();
+  displayTodos();
+  showAlert("Todo status changed successfully", "success");
+
+  // const updateStatus = todos.map((todo) => {
+  //   if (todo.id === id) {
+  //     return { ...todo, completed: !todo.completed };
+  //     // return {
+  //     //   id: todo.id,
+  //     //   task: todo.task,
+  //     //   date: todo.date,
+  //     //   completed: !todo.completed,
+  //     // };
+  //   } else {
+  //     return todo;
+  //   }
+  // });
+  // todos = updateStatus;
 };
 
 window.addEventListener("load", displayTodos);
