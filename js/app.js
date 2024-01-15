@@ -5,6 +5,7 @@ const editBtn = document.getElementById("edit-todo");
 const alertMsg = document.getElementById("alert-message");
 const todosBody = document.querySelector("tbody");
 const deleteAllButton = document.getElementById("delete-all-btn");
+const filterButtons = document.querySelectorAll(".filter-todo");
 
 let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
@@ -28,25 +29,28 @@ const showAlert = (message, type) => {
   }, 2000);
 };
 
-const displayTodos = () => {
+const displayTodos = (data) => {
+  const todoList = data || todos;
   todosBody.innerHTML = "";
-  if (!todos.length) {
+
+  if (!todoList.length) {
     todosBody.innerHTML = "<tr><td colspan='4'>No task found!</td></tr>";
     return;
   }
-  todos.forEach((todo) => {
+
+  todoList.forEach((todo) => {
     todosBody.innerHTML += `
     <tr>
       <td>${todo.task}</td>
       <td>${todo.date || "No Date"}</td>
       <td>${todo.completed ? "Completed" : "Pending"}</td>
       <td>
-        <button onclick="editHandler('${todo.id}')" >Edit</button>
+        <button onclick="editHandler('${todo.id}')">Edit</button>
         <button onclick="toggleHandler('${todo.id}')">
-        ${todo.completed ? "Undo" : "Do"}
+          ${todo.completed ? "Undo" : "Do"}      
         </button>
         <button onclick="deleteHandler('${todo.id}')">Delete</button>
-      </td>    
+      </td>
     </tr>
     `;
   });
@@ -55,12 +59,14 @@ const displayTodos = () => {
 const addHandler = () => {
   const nameTodo = taskInput.value;
   const dateTodo = dateInput.value;
+
   const todo = {
     id: generateId(),
     task: nameTodo,
     date: dateTodo,
     completed: false,
   };
+
   if (nameTodo) {
     todos.push(todo);
     saveToLocalStorage();
@@ -128,6 +134,7 @@ const editHandler = (id) => {
 const applyEditHandler = (event) => {
   const id = event.target.dataset.id;
   const getTodo = todos.find((todo) => todo.id === id);
+
   getTodo.task = taskInput.value;
   getTodo.date = dateInput.value;
   taskInput.value = "";
@@ -139,7 +146,28 @@ const applyEditHandler = (event) => {
   showAlert("Todo edited successfully", "success");
 };
 
-window.addEventListener("load", displayTodos);
+const filterHandler = (event) => {
+  let filteredTodos = null;
+  const filter = event.target.dataset.filter;
+
+  switch (filter) {
+    case "pending":
+      filteredTodos = todos.filter((todo) => todo.completed === false);
+      break;
+    case "completed":
+      filteredTodos = todos.filter((todo) => todo.completed === true);
+      break;
+    default:
+      filteredTodos = todos;
+      break;
+  }
+  displayTodos(filteredTodos);
+};
+
+window.addEventListener("load", () => displayTodos());
 addBtn.addEventListener("click", addHandler);
 editBtn.addEventListener("click", applyEditHandler);
 deleteAllButton.addEventListener("click", deleteAllHandler);
+filterButtons.forEach((button) => {
+  button.addEventListener("click", filterHandler);
+});
